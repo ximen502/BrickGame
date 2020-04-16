@@ -15,8 +15,6 @@ public class ExplodeObject extends GameObject{
     private Random random = new Random();
     private final int DEFAULT_RADIUS = 30;// 初始半径
     private final int DEFAULT_COUNT = 25;// 初始粒子个数
-    private int radius = DEFAULT_RADIUS;// 初始半径
-    private double rate = 0.8;// 每次衰减为0.8
     private java.util.List<Particle> list = new ArrayList<>();
     private int frames = 0;
 
