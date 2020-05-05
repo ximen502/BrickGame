@@ -8,6 +8,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -121,14 +123,14 @@ public class BricksGame extends BaseGame {
         GameOver gameOver = new GameOver(memG);
         ball.setGameOverListener(gameOver);
 
-        // 重新渲染画面任务
-        render = new RenderTask(this);
-        render.start();
-
         // 键盘事件的监听
         Input input = new Input();
         input.init();
         addKeyListener(input);
+
+        // 重新渲染画面任务
+        render = new RenderTask(this);
+        render.start();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -245,16 +247,14 @@ public class BricksGame extends BaseGame {
         private ExecutorService executorService = Executors.newFixedThreadPool(3);
         private File file = new File("audio/brick2.wav");
         private AudioClip audio;
-        {
+
+
+        public HitBrick() {
             try {
                 audio = Applet.newAudioClip(file.toURI().toURL());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-        }
-
-
-        public HitBrick() {
         }
 
         @Override
