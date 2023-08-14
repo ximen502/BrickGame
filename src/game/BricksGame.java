@@ -31,6 +31,9 @@ public class BricksGame extends BaseGame {
     private Image memImage;
     private Graphics memG;// 双缓冲的画布
 
+    // 游戏开始后等待一定的帧数再开始绘制游戏对象，避免一些Exception, NPE...
+    private int waitFrames = 0;
+
     public BricksGame(int width, int height, String title) throws HeadlessException {
         super(width, height, title);
         super.setBgColor(new Color(0x23,0x30,0x41));
@@ -157,6 +160,11 @@ public class BricksGame extends BaseGame {
 
     @Override
     public void paint(Graphics g) {
+        if (waitFrames < 30) {
+            System.out.println(waitFrames);
+            waitFrames++;
+            return;
+        }
         clear(memG);// 将画布清空为背景色
 
         for (int i = 0; i < list.size(); i++) {
