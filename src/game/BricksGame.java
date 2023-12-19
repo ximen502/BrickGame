@@ -81,6 +81,11 @@ public class BricksGame extends BaseGame {
         ball.setWoodBar(wood);
         list.add(ball);
 
+        Tips tips = new Tips();
+        tips.setX(getWidth() / 2);
+        tips.setY(getHeight() * 2 / 3);
+        list.add(tips);
+
         Color[] colors = new Color[]{
                 new Color(0xAA, 0xCF, 0x51),
                 new Color(0xFC, 0xA9, 0x4B),
