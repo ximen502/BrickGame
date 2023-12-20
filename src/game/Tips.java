@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public class Tips extends GameObject {
     int ttl = 0;
-    int alpha = 0xff;
+    int alpha = 0x0;
     Color textColor;
     Font font;
     String text;
@@ -31,7 +31,12 @@ public class Tips extends GameObject {
     @Override
     public void onTick() {
         ttl++;
-        if (ttl > 90 && ttl <= 120) {// 渐渐淡出
+        if(ttl <= 20) {
+            alpha += 13;
+            if (alpha > 255) {
+                alpha = 255;
+            }
+        } else if (ttl > 90 && ttl <= 120) {// 渐渐淡出
             alpha -= 9;
             if (alpha <= 0) {// 防止异常发生
                 alpha = 0;
