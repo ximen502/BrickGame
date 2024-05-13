@@ -52,4 +52,17 @@ public class ExplodeObject extends GameObject{
         if (frames > 30)// 只需要绘制30帧(hard code)
             setGone(true);
     }
+
+    public void reset() {
+        if (frames > 30) {
+            frames = 0;
+            for (int i = 0; i < list.size(); i++) {
+                Particle p = list.get(i);
+                p.setSpeed(random.nextInt(3) + 2);
+                p.setNewRate(0.1);
+                p.x = x;
+                p.y = y;
+            }
+        }
+    }
 }

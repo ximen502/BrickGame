@@ -1,5 +1,8 @@
 package game;
 
+import com.brackeen.sound.SoundManager;
+import game.audio.AC;
+
 import javax.swing.*;
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -33,6 +36,7 @@ public class BricksGame extends BaseGame {
 
     // 游戏开始后等待一定的帧数再开始绘制游戏对象，避免一些Exception, NPE...
     private int waitFrames = 0;
+    private ExplodeObject[] eObjArray = new ExplodeObject[3];
 
     public BricksGame(int width, int height, String title) throws HeadlessException {
         super(width, height, title);
@@ -80,6 +84,10 @@ public class BricksGame extends BaseGame {
         ball.setCoordinator(width / 2 - ball.getRadius(), wood.getY()-ball.getRadius()*2);
         ball.setWoodBar(wood);
         list.add(ball);
+
+        eObjArray[0] = new ExplodeObject();
+        eObjArray[1] = new ExplodeObject();
+        eObjArray[2] = new ExplodeObject();
 
         Tips tips = new Tips();
         tips.setX(getWidth() / 2);
@@ -130,6 +138,10 @@ public class BricksGame extends BaseGame {
         memG = memImage.getGraphics();
         GameOver gameOver = new GameOver(memG);
         ball.setGameOverListener(gameOver);
+
+        AC ac = AC.getInstance();
+        ac.soundManager = new SoundManager(AC.HIT_FORMAT, 3);
+        ac.hit = ac.soundManager.getSound("/game/audio/brick2.wav");
 
         // 键盘事件的监听
         Input input = new Input();
@@ -257,30 +269,25 @@ public class BricksGame extends BaseGame {
 
     // 小球碰到砖块的回调
     class HitBrick implements Brick.HitListener{
-        private ExecutorService executorService = Executors.newFixedThreadPool(3);
-        private File file = new File("audio/brick2.wav");
-        private AudioClip audio;
 
-
-        public HitBrick() {
-            try {
-                audio = Applet.newAudioClip(file.toURI().toURL());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
+        private int index = 0;
+        public HitBrick() { }
 
         @Override
         public void hit(Brick brick) {
-            executorService.execute(new PlayHitAudioTask(audio));
+            AC ac = AC.getInstance();
+            ac.soundManager.play(ac.hit);
 
             ExplodeObject eo = new ExplodeObject();
+//            ExplodeObject eo = eObjArray[index % 3];
+//            eo.reset();
             eo.x = brick.x;
             eo.y = brick.y;
             eo.width = brick.width;
             eo.height = brick.height;
             eo.color = brick.color;
             list.add(eo);
+            index++;
         }
     }
 
